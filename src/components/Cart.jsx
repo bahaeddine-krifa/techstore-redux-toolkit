@@ -1,20 +1,33 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
 
 import {
   addItem,
   removeItem,
-  clearCart
+  clearCart,
+  applyPromoCode
 } from '../redux/cartSlice';
 
 export default function Cart() {
+  
+  // Récupérer dispatch
+  const dispatch = useDispatch();
+
+  const [promoCode, setPromoCode] = useState('');
 
   // Lire les données du panier depuis Redux
-  const { items, totalCount, totalPrice } = useSelector(
+  const { items, totalCount, totalPrice, discountPercent } = useSelector(
     (state) => state.cart
   );
 
-  // Récupérer dispatch
-  const dispatch = useDispatch();
+  const discountAmount = totalPrice * discountPercent / 100;
+
+  const finalPrice = totalPrice - discountAmount;
+
+  const handleApplyPromo = () => {
+    dispatch(applyPromoCode(promoCode));
+  };
+
 
   return (
     <div className="cart-card">
@@ -96,6 +109,32 @@ export default function Cart() {
 
       )}
 
+      <div className="promo-section">
+        <h3>Code Promo</h3>
+
+        <input
+          type="text"
+          placeholder="Entrez votre code promo"
+          value={promoCode}
+          onChange={(e) => setPromoCode(e.target.value)}
+        />
+
+        <button onClick={handleApplyPromo}>
+          Appliquer
+        </button>
+      </div>
+      {discountPercent > 0 && (
+        <div className="discount-result">
+          <p>
+            Remise ({discountPercent}%) :
+            -{discountAmount.toFixed(2)} DT
+          </p>
+
+          <h3>
+            Total après remise : {finalPrice.toFixed(2)} DT
+          </h3>
+        </div>
+      )}
     </div>
   );
 }
