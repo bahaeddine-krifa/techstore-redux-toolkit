@@ -7,7 +7,8 @@ const initialState = {
   ) || [],
 
   totalCount: 0,
-  totalPrice: 0
+  totalPrice: 0,
+  discountPercent: 0
 };
 
 // 2. Recalculer les totaux et sauvegarder
@@ -81,11 +82,18 @@ export const cartSlice = createSlice({
       state.items = [];
       state.totalCount = 0;
       state.totalPrice = 0;
+      state.discountPercent = 0;
 
       localStorage.setItem(
         'techstore_cart',
         JSON.stringify(state.items)
       );
+    },
+
+    applyPromoCode: (state, action) => {
+      if (action.payload === 'POLY2027') {
+        state.discountPercent = 20;
+      }
     }
   }
 });
@@ -94,7 +102,8 @@ export const cartSlice = createSlice({
 export const {
   addItem,
   removeItem,
-  clearCart
+  clearCart,
+  applyPromoCode
 } = cartSlice.actions;
 
 // 5. Exporter le reducer

@@ -224,3 +224,36 @@
     align-self: flex-end;
   }
 }
+.promo-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.promo-section input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.promo-section button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.promo-section button:hover {
+  opacity: 0.9;
+}
+
+.discount-result {
+  margin-top: 15px;
+  color: green;
+  font-weight: bold;
+}
