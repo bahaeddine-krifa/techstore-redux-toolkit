@@ -1,7 +1,7 @@
 import Navbar from './components/Navbar';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
-
+import NotificationToast from './components/NotificationToast';
 import { useTheme } from './context/ThemeContext';
 
 import './App.css';
@@ -14,6 +14,8 @@ function App() {
     <div className={`app ${theme}`}>
 
       <Navbar />
+
+      <NotificationToast />
 
       <main className="main-content">
 

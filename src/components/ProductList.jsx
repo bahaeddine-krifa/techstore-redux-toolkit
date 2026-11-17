@@ -1,5 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { addItem } from '../redux/cartSlice';
+import { useRef, useEffect } from 'react';
+import { showToast, hideToast } from '../redux/uiSlice';
 
 // Catalogue des produits
 const PRODUCTS = [
@@ -34,6 +36,30 @@ export default function ProductList() {
   // Récupérer la fonction dispatch
   const dispatch = useDispatch();
 
+  const toastTimer = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(toastTimer.current);
+    };
+  }, []);
+
+  const handleAddToCart = (product) => {
+    // Ajouter le produit au panier
+    dispatch(addItem(product));
+
+    // Afficher la notification
+    dispatch(showToast(`${product.name} ajouté au panier !`));
+
+    // Annuler le précédent minuteur
+    clearTimeout(toastTimer.current);
+
+    // Masquer la notification après 3 secondes
+    toastTimer.current = setTimeout(() => {
+      dispatch(hideToast());
+    }, 3000);
+  };
+
   return (
     <div className="product-section">
 
@@ -57,7 +83,7 @@ export default function ProductList() {
 
             <button
               className="btn-add"
-              onClick={() => dispatch(addItem(product))}
+              onClick={() => handleAddToCart(product)}
             >
               + Ajouter au panier
             </button>
