@@ -2,13 +2,13 @@ import Navbar from './components/Navbar';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 
-import { useTheme } from './context/ThemeContext';
+import { useSelector } from 'react-redux';
 
 import './App.css';
 
 function App() {
 
-  const { theme } = useTheme();
+  const theme = useSelector((state) => state.theme.mode);
 
   return (
     <div className={`app ${theme}`}>

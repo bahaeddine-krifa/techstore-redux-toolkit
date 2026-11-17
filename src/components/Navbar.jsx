@@ -1,15 +1,14 @@
-import { useSelector } from 'react-redux';
-import { useTheme } from '../context/ThemeContext';
+import { useSelector,useDispatch } from 'react-redux';
+import { toggleTheme } from '../redux/themeSlice';
 
 export default function Navbar() {
 
   // Récupérer le thème depuis Context API
-  const { theme, toggleTheme } = useTheme();
+  const theme = useSelector((state) => state.theme.mode);
+  const totalCount = useSelector((state) => state.cart.totalCount);
 
-  // Récupérer le nombre d'articles depuis Redux
-  const totalCount = useSelector(
-    (state) => state.cart.totalCount
-  );
+  const dispatch = useDispatch();
+
 
   return (
     <nav className="navbar">
@@ -23,7 +22,7 @@ export default function Navbar() {
 
         <button
           className="btn-theme-toggle"
-          onClick={toggleTheme}
+          onClick={() => dispatch(toggleTheme())}
         >
           {theme === 'light' ? '🌙 Mode Sombre' : '☀️ Mode Clair'}
         </button>
