@@ -1,14 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// 1. État initial du panier
+// 1. État initial avec récupération depuis localStorage
 const initialState = {
-  items: [],
+  items: JSON.parse(
+    localStorage.getItem('techstore_cart')
+  ) || [],
+
   totalCount: 0,
   totalPrice: 0
 };
 
-// 2. Fonction pour recalculer les totaux
+// 2. Recalculer les totaux et sauvegarder
 const recalculateTotals = (state) => {
+
   state.totalCount = state.items.reduce(
     (sum, item) => sum + item.quantity,
     0
@@ -18,7 +22,15 @@ const recalculateTotals = (state) => {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  localStorage.setItem(
+    'techstore_cart',
+    JSON.stringify(state.items)
+  );
 };
+
+// Recalculer les totaux au premier chargement
+recalculateTotals(initialState);
 
 // 3. Création du Slice
 export const cartSlice = createSlice({
@@ -45,7 +57,7 @@ export const cartSlice = createSlice({
       recalculateTotals(state);
     },
 
-    // Diminuer la quantité ou supprimer le produit
+    // Diminuer ou supprimer un produit
     removeItem: (state, action) => {
       const existing = state.items.find(
         (item) => item.id === action.payload
@@ -64,17 +76,26 @@ export const cartSlice = createSlice({
       recalculateTotals(state);
     },
 
-    // Vider complètement le panier
+    // Vider le panier
     clearCart: (state) => {
       state.items = [];
       state.totalCount = 0;
       state.totalPrice = 0;
+
+      localStorage.setItem(
+        'techstore_cart',
+        JSON.stringify(state.items)
+      );
     }
   }
 });
 
 // 4. Exporter les actions
-export const { addItem, removeItem, clearCart } = cartSlice.actions;
+export const {
+  addItem,
+  removeItem,
+  clearCart
+} = cartSlice.actions;
 
 // 5. Exporter le reducer
 export default cartSlice.reducer;
